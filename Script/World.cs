@@ -4,23 +4,23 @@ using System.Threading;
 using UnityEngine;
 
 
-//¿ùµå ÀüÃ¼¸¦ °ü¸®ÇÏ´Â ÄÄÆ÷³ÍÆ®
-//ÇÃ·¹ÀÌ¾î À§Ä¡¿¡ µû¶ó Ã»Å© »ı¼ºÀ» °ü¸®
-//¹é±×¶ó¿îµå ½º·¹µå¿¡¼­ Ã»Å© µ¥ÀÌÅÍ »ı¼º ÈÄ ¸ŞÀÎ ½º·¹µå¿¡ ¹İ¿µ
+//ì›”ë“œ ì „ì²´ë¥¼ ê´€ë¦¬í•˜ëŠ” ì»´í¬ë„ŒíŠ¸
+//í”Œë ˆì´ì–´ ìœ„ì¹˜ì— ë”°ë¼ ì²­í¬ ìƒì„±ì„ ê´€ë¦¬
+//ë°±ê·¸ë¼ìš´ë“œ ìŠ¤ë ˆë“œì—ì„œ ì²­í¬ ë°ì´í„° ìƒì„± í›„ ë©”ì¸ ìŠ¤ë ˆë“œì— ë°˜ì˜
 public class World : MonoBehaviour
 {   
-    public Material material; // ÅØ½ºÃÄ ¾ÆÆ²¶ó½º
-    public BlockType[] blockTypes; // ºí·ÏÅ¸ÀÔ Á¤ÀÇ (solid, texture µî)
-    public BiomeData biome; // ¹ÙÀÌ¿È µ¥ÀÌÅÍ (ÁöÇü, ±¤¹° µî)
+    public Material material; // í…ìŠ¤ì³ ì•„í‹€ë¼ìŠ¤
+    public BlockType[] blockTypes; // ë¸”ë¡íƒ€ì… ì •ì˜ (solid, texture ë“±)
+    public BiomeData biome; // ë°”ì´ì˜´ ë°ì´í„° (ì§€í˜•, ê´‘ë¬¼ ë“±)
 
-    private Dictionary<ChunkCoord, Chunk> chunks = new Dictionary<ChunkCoord, Chunk>(); // »ı¼ºµÈ Ã»Å©¸¦ °ü¸®ÇÏ´Â µñ¼Å³Ê¸® ¸Ê
+    private Dictionary<ChunkCoord, Chunk> chunks = new Dictionary<ChunkCoord, Chunk>(); // ìƒì„±ëœ ì²­í¬ë¥¼ ê´€ë¦¬í•˜ëŠ” ë”•ì…”ë„ˆë¦¬ ë§µ
 
     public Transform player;
     public Vector3 spawnPosition;
 
-    List<ChunkCoord> currentActiveChunkList = new List<ChunkCoord>(); //ÇöÀç È°¼ºÈ­µÈ Ã»Å© ÁÂÇ¥ ¸ñ·Ï
+    List<ChunkCoord> currentActiveChunkList = new List<ChunkCoord>(); //í˜„ì¬ í™œì„±í™”ëœ ì²­í¬ ì¢Œí‘œ ëª©ë¡
 
-    // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡ Á¤º¸
+    // í”Œë ˆì´ì–´ì˜ ìœ„ì¹˜ ì •ë³´
     private (int, int) prevPlayerCoord;
     private (int, int) currentPlayerCoord;
 
@@ -37,7 +37,7 @@ public class World : MonoBehaviour
         }
     }
 
-    // Ã»Å©ÀÇ ¸Ş½Ãµ¥ÀÌÅÍ »ı¼ºÀ» ¿äÃ»
+    // ì²­í¬ì˜ ë©”ì‹œë°ì´í„° ìƒì„±ì„ ìš”ì²­
     public void RequestChunkGeneration(ChunkCoord coord)
     {
 
@@ -70,7 +70,7 @@ public class World : MonoBehaviour
 
     private void Start()
     {
-        UnityEngine.Random.InitState(seed); // ½Ãµå°ª ÃÊ±âÈ­
+        UnityEngine.Random.InitState(seed); // ì‹œë“œê°’ ì´ˆê¸°í™”
         InitPositions();
     }
 
@@ -85,7 +85,7 @@ public class World : MonoBehaviour
                 action?.Invoke();
             }
         }
-        // ÇÃ·¹ÀÌ¾î°¡ Ã»Å© À§Ä¡¸¦ ÀÌµ¿ÇÑ °æ¿ì, ½Ã¾ß ¹üÀ§ °»½Å
+        // í”Œë ˆì´ì–´ê°€ ì²­í¬ ìœ„ì¹˜ë¥¼ ì´ë™í•œ ê²½ìš°, ì‹œì•¼ ë²”ìœ„ ê°±ì‹ 
         if (!currentPlayerCoord.Equals(prevPlayerCoord))
         {
 
@@ -94,21 +94,21 @@ public class World : MonoBehaviour
 
     }
 
-    //ºí·Ï Å¸ÀÔ Á¤ÀÇ
+    //ë¸”ë¡ íƒ€ì… ì •ì˜
     public byte GetBlockType(in Vector3 worldPos)
     {
  
         int yPos = (int)worldPos.y;
-        byte blockType = 0; // ±âº» ºí·Ï Å¸ÀÔ (°ø±â)
+        byte blockType = 0; // ê¸°ë³¸ ë¸”ë¡ íƒ€ì… (ê³µê¸°)
 
         /* -----------------------------------------------
                             Immutable Pass
         ----------------------------------------------- */
-        // ¿ùµå ¹Û : °ø±â
+        // ì›”ë“œ ë°– : ê³µê¸°
         if (!IsBlockInWorld(worldPos))
             return 0;
 
-        // ³ôÀÌ 0Àº ±â¹İ¾Ï
+        // ë†’ì´ 0ì€ ê¸°ë°˜ì•”
         if (yPos == 0)
             return 1;
 
@@ -116,21 +116,21 @@ public class World : MonoBehaviour
                         Basic Terrain Pass
         ----------------------------------------------- */
 
-        float noise = Noise.Get2DPerlin(new Vector2(worldPos.x, worldPos.z), 0f, biome.terrainScale);
+        float noise = Noise.Get2DPerlin(new Vector2(worldPos.x, worldPos.z), 0f, biome.terrainScale); //ì˜¤í”„ì…‹ ê°’ì— seed ì‚¬ìš© ê°€ëŠ¥
         float terrainHeight = (int)(biome.terrainHeightRange * noise) + biome.solidGroindHeight;
 
-        // teerainHeight ¸¦ ±âÁØÀ¸·Î °áÁ¤
+        // teerainHeight ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ê²°ì •
         if (yPos > terrainHeight)
         {
             return 0;
         }
 
-        // Áö¸é
+        // ì§€ë©´
         if (yPos == terrainHeight)
         {
             return 2;
         }
-        // ¶¥¼Ó
+        // ë•…ì†
         else if (terrainHeight - 4 < yPos && yPos < terrainHeight)
         {
             return 3;
@@ -144,7 +144,7 @@ public class World : MonoBehaviour
         *              Second Terrain Pass              *
         * --------------------------------------------- */
 
-        //±¤¹° »ı¼º
+        //ê´‘ë¬¼ ìƒì„±
         if (blockType == 5)
         {
             foreach (var lode in biome.lodes)
@@ -167,7 +167,7 @@ public class World : MonoBehaviour
         return pos.y >= 0 && pos.y < VoxelData.ChunkHeight;
     }
 
-    //ÇØ´ç À§Ä¡ÀÇ ºí·ÏÀÌ °ø±âÃşÀÎÁö °Ë»ç
+    //í•´ë‹¹ ìœ„ì¹˜ì˜ ë¸”ë¡ì´ ê³µê¸°ì¸µì¸ì§€ ê²€ì‚¬
     public bool IsBlockSolid(in Vector3 worldPos)
     {
         return blockTypes[GetBlockType(worldPos)].isSolid;
@@ -190,16 +190,16 @@ public class World : MonoBehaviour
     }
 
 
-    // ½Ã¾ß¹üÀ§ ³»ÀÇ Ã»Å© »ı¼º
+    // ì‹œì•¼ë²”ìœ„ ë‚´ì˜ ì²­í¬ ìƒì„±
     private void UpdateChunksInViewRange()
     {
         var location = GetChunkCoordFromWorldPos(player.position);
         ChunkCoord centerCoord = new ChunkCoord(location.Item1, location.Item2);
-        prevPlayerCoord = currentPlayerCoord; // ±âÁØ ÁÂÇ¥ °»½Å
+        prevPlayerCoord = currentPlayerCoord; // ê¸°ì¤€ ì¢Œí‘œ ê°±ì‹ 
         int viewDist = VoxelData.ViewDistanceInChunks;
 
 
-        // È°¼º ¸ñ·Ï : ÇöÀç -> ÀÌÀüÀ¸·Î ÀÌµ¿
+        // í™œì„± ëª©ë¡ : í˜„ì¬ -> ì´ì „ìœ¼ë¡œ ì´ë™
         List<ChunkCoord> prevActiveChunkList = new List<ChunkCoord>(currentActiveChunkList);
         currentActiveChunkList.Clear();
 
@@ -210,11 +210,11 @@ public class World : MonoBehaviour
                 ChunkCoord coord = new ChunkCoord(x, z);
 
 
-                // ½Ã¾ß ¹üÀ§ ³»¿¡ Ã»Å©°¡ »ı¼ºµÇÁö ¾ÊÀº ¿µ¿ªÀÌ ÀÖÀ» °æ¿ì, »õ·Î »ı¼º
+                // ì‹œì•¼ ë²”ìœ„ ë‚´ì— ì²­í¬ê°€ ìƒì„±ë˜ì§€ ì•Šì€ ì˜ì—­ì´ ìˆì„ ê²½ìš°, ìƒˆë¡œ ìƒì„±
                 if (!chunks.ContainsKey(coord))
                 {
                     chunks.Add(coord, null);
-                    RequestChunkGeneration(coord); // ½º·¹µå¿¡¼­ Ã»Å© »ı¼º ¿äÃ»
+                    RequestChunkGeneration(coord); // ìŠ¤ë ˆë“œì—ì„œ ì²­í¬ ìƒì„± ìš”ì²­
                 }
                 else if (chunks[coord] != null && !chunks[coord].IsActive)
                 {
