@@ -8,10 +8,10 @@
 ```
 Assets/
 └─ Script/
-   ├─ World.cs              // 월드/청크 관리 + 스레드 디스패치
-   ├─ Chunk.cs              // 청크 GameObject + MeshRenderer/Filter 구성
-   ├─ ChunkMeshBuilder.cs   // MeshData 생성
-   ├─ VoxelData.cs          // 복셀/아틀라스 상수 및 헬퍼
+   ├─ World.cs                 # 월드/청크 관리 + 스레드 디스패치
+   ├─ Chunk.cs                 # 청크 GameObject + MeshRenderer/Filter 구성
+   ├─ ChunkMeshBuilder.cs      # MeshData 생성
+   ├─ VoxelData.cs             # 복셀/아틀라스 상수 및 헬퍼
    ├─ (BlockType.cs, BiomeData.cs, Noise.cs 등 사용됨)
 ```
 ## 동작 개요
